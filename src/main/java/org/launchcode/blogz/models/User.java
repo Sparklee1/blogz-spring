@@ -21,8 +21,10 @@ public class User extends AbstractEntity {
 	private String pwHash;
 	private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	
+	// all posts by a given user
 	private List<Post> posts;
 	
+	// no-arg constructor, for hibernate
 	public User() {}
 	
 	public User(String username, String password) {
@@ -64,16 +66,20 @@ public class User extends AbstractEntity {
 		this.username = username;
 	}
 	
+	// checks that the given password is correct for the user
+	//user.isMatchingPassowrd(...)
 	public boolean isMatchingPassword(String password) {
 		return encoder.matches(password, pwHash);
 	}
 	
+	// checks that the password meets minimum standards
 	public static boolean isValidPassword(String password) {
 		Pattern validUsernamePattern = Pattern.compile("(\\S){6,20}");
 		Matcher matcher = validUsernamePattern.matcher(password);
 		return matcher.matches();
 	}
 	
+	// checks that the username meets minimum standards
 	public static boolean isValidUsername(String username) {
 		Pattern validUsernamePattern = Pattern.compile("[a-zA-Z][a-zA-Z0-9_-]{4,11}");
 		Matcher matcher = validUsernamePattern.matcher(username);
@@ -84,8 +90,8 @@ public class User extends AbstractEntity {
 		posts.add(post);
 	}
 	
-	@OneToMany
-    @JoinColumn(name = "author_uid")
+	@OneToMany // for every one user there will be many posts
+    @JoinColumn(name = "author_uid") // this says go to the post table, look for this column, and give me back all the posts where the user uid column matches the uid of this particular user
     public List<Post> getPosts() {
         return posts;
     }

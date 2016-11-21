@@ -57,6 +57,7 @@ public class Post extends AbstractEntity {
 		this.updated();
 	}
 	
+	// many posts that correspond to one author
 	@ManyToOne
 	public User getAuthor() {
 		return author;
